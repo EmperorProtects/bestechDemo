@@ -1,0 +1,22 @@
+# Публикация демо-стенда на Render как статического сайта (бесплатный тариф).
+# Сборки нет: файлы отдаются как есть, точка входа — index.html.
+#
+# Render → New → Blueprint → выбрать репозиторий с этим файлом.
+
+services:
+  - type: web
+    name: bestech-demo
+    runtime: static
+    plan: free
+    staticPublishPath: .
+    autoDeploy: false
+    headers:
+      # Стенд статический, но пусть браузер не кэширует разметку между показами
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+    routes:
+      # Единственная страница: любой адрес ведёт на неё
+      - type: rewrite
+        source: /*
+        destination: /index.html

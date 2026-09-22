@@ -1,0 +1,675 @@
+/* Каркас демо-стенда. Цвета, шрифты и компоненты берутся из tokens.css и ui.css портала. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bst-bg);
+}
+
+body {
+  background: var(--bst-bg);
+  color: var(--bst-text);
+  font-family: var(--bst-font-body);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--bst-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  margin: 0;
+}
+
+.muted {
+  color: var(--bst-text-mute);
+}
+
+/* ── Шапка ─────────────────────────────────────────────── */
+
+.app__header {
+  display: flex;
+  align-items: center;
+  gap: var(--bst-space-5);
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--bst-line);
+  background: var(--bst-bg);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--bst-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 18px;
+}
+
+.brand__mark {
+  border: 1.5px solid var(--bst-line-strong);
+  padding: 3px 7px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.brand__sub {
+  display: block;
+  font-family: var(--bst-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--bst-text-mute);
+  text-transform: uppercase;
+}
+
+.head-object {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.head-object__k {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--bst-text-mute);
+}
+
+.head-tools {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 9px;
+  border: 1px solid var(--bst-ok);
+  color: var(--bst-ok);
+  font-family: var(--bst-font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+}
+
+.live[data-paused='true'] {
+  border-color: var(--bst-offline);
+  color: var(--bst-offline);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+  border-radius: 50%;
+  animation: bst-live-pulse 1.6s ease-in-out infinite;
+}
+
+.live[data-paused='true'] .live-dot {
+  animation: none;
+}
+
+@keyframes bst-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ── Вкладки ───────────────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--bst-line);
+  background: var(--bst-bg);
+  position: sticky;
+  top: 57px;
+  z-index: 3;
+}
+
+.tabs__tab {
+  padding: 11px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font-family: var(--bst-font-heading);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--bst-text) 62%, transparent);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tabs__tab:hover {
+  color: var(--bst-text);
+}
+
+.tabs__tab[aria-current='page'] {
+  border-bottom-color: var(--bst-accent);
+  color: var(--bst-text);
+}
+
+.tabs__count {
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--bst-alarm);
+}
+
+/* ── Страницы ──────────────────────────────────────────── */
+
+.page {
+  padding: var(--bst-space-5) 16px var(--bst-space-8);
+  display: grid;
+  gap: var(--bst-space-5);
+  max-width: 1560px;
+  margin: 0 auto;
+}
+
+.page[hidden] {
+  display: none !important;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--bst-line);
+  font-size: 11px;
+}
+
+.panel-head__views {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.padded-frame {
+  padding: 0 0 var(--bst-space-4);
+}
+
+.padded-frame > .bst-h,
+.padded-frame > p,
+.padded-frame > ul,
+.padded-frame > pre {
+  margin: var(--bst-space-4) var(--bst-space-5) 0;
+}
+
+/* ── KPI ───────────────────────────────────────────────── */
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--bst-space-4);
+}
+
+.kpi {
+  position: relative;
+  border: 1px solid var(--bst-line);
+  padding: var(--bst-card-pad);
+  background: var(--bst-surface);
+}
+
+.kpi__value {
+  font-family: var(--bst-font-mono);
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.kpi__value small {
+  font-size: 15px;
+  color: var(--bst-text-mute);
+}
+
+.kpi__foot {
+  font-family: var(--bst-font-mono);
+  font-size: 10px;
+  color: var(--bst-text-mute);
+  margin-top: 4px;
+}
+
+/* ── Обзор: модель и список ────────────────────────────── */
+
+.overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--bst-space-4);
+  align-items: stretch;
+}
+
+.viewer-frame,
+.sensors-frame {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bst-surface);
+}
+
+.viewer {
+  position: relative;
+  flex: 1;
+  min-height: 470px;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 3px 16px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--bst-line);
+  font-size: 10.5px;
+}
+
+.legend span:first-child {
+  grid-column: 1 / -1;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--bst-text-mute);
+}
+
+.sensor-list {
+  display: grid;
+  overflow-y: auto;
+  max-height: 560px;
+}
+
+.sensor-row {
+  display: grid;
+  grid-template-columns: 20px 62px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--bst-line);
+  border-left: 2px solid transparent;
+  background: transparent;
+  padding: var(--bst-row-pad);
+  cursor: pointer;
+  font: inherit;
+  color: var(--bst-text);
+}
+
+.sensor-row:hover {
+  background: var(--bst-accent-tint);
+}
+
+.sensor-row[data-selected='true'] {
+  background: var(--bst-raised);
+  border-left-color: var(--bst-text);
+}
+
+.sensor-row__name {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selected-frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: var(--bst-space-5);
+  padding: var(--bst-card-pad);
+  align-items: center;
+  background: var(--bst-surface);
+}
+
+.selected__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.selected__name {
+  font-family: var(--bst-font-heading);
+  font-size: 19px;
+  text-transform: uppercase;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px 18px;
+  margin-top: 12px;
+  font-family: var(--bst-font-mono);
+  font-size: 11.5px;
+}
+
+.facts b {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--bst-text-mute);
+  font-weight: 400;
+}
+
+/* ── Телеметрия ────────────────────────────────────────── */
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: var(--bst-space-4);
+}
+
+.chart-card {
+  position: relative;
+  border: 1px solid var(--bst-line);
+  background: var(--bst-surface);
+  padding-bottom: 10px;
+}
+
+.chart-card__body {
+  padding: 10px 12px 0;
+}
+
+/* ── Аварии ────────────────────────────────────────────── */
+
+.alarms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: var(--bst-space-4);
+  align-items: start;
+}
+
+.alarms__table-wrap,
+.alarms__detail {
+  border: 1px solid var(--bst-line);
+  background: var(--bst-surface);
+  overflow-x: auto;
+}
+
+.alarms__detail {
+  padding-bottom: var(--bst-space-4);
+}
+
+.alarm-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 var(--bst-space-4);
+  margin-top: var(--bst-space-4);
+}
+
+/* ── Пульт ─────────────────────────────────────────────── */
+
+.scenarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--bst-space-3);
+  padding: var(--bst-space-4) var(--bst-space-5) 0;
+}
+
+.scenario {
+  text-align: left;
+  border: 1px solid var(--bst-line);
+  background: var(--bst-raised);
+  padding: 11px 13px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--bst-text);
+  display: grid;
+  gap: 4px;
+}
+
+.scenario:hover {
+  border-color: var(--bst-accent);
+}
+
+.scenario[aria-pressed='true'] {
+  border-color: var(--bst-accent);
+  background: var(--bst-accent-tint);
+}
+
+.scenario b {
+  font-family: var(--bst-font-heading);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.scenario span {
+  font-size: 12px;
+  color: var(--bst-text-soft);
+  line-height: 1.4;
+}
+
+.console-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--bst-space-4);
+  align-items: start;
+}
+
+.sliders {
+  display: grid;
+  gap: var(--bst-space-3);
+  padding: var(--bst-space-4) var(--bst-space-5) 0;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) 96px;
+  gap: 12px;
+  align-items: center;
+  font-family: var(--bst-font-mono);
+  font-size: 11.5px;
+}
+
+.slider input[type='range'] {
+  width: 100%;
+  accent-color: var(--bst-accent);
+}
+
+.slider__value {
+  text-align: right;
+}
+
+.packets {
+  list-style: none;
+  margin: 0;
+  padding: var(--bst-space-4) var(--bst-space-5) 0;
+  display: grid;
+  gap: 5px;
+  font-size: 11px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.packets li {
+  display: flex;
+  gap: 10px;
+  color: var(--bst-text-soft);
+}
+
+.packets li b {
+  color: var(--bst-ok);
+  font-weight: 500;
+}
+
+/* ── Текстовая страница ────────────────────────────────── */
+
+.prose p,
+.prose li {
+  max-width: 76ch;
+  line-height: 1.6;
+}
+
+.prose h3 {
+  font-size: 17px;
+  margin-top: var(--bst-space-5);
+}
+
+.code {
+  border: 1px solid var(--bst-line);
+  background: var(--bst-raised);
+  padding: 12px 14px;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ── Подвал ────────────────────────────────────────────── */
+
+.app__footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  border-top: 1.5px solid var(--bst-line-strong);
+  font-size: 11px;
+}
+
+.app__footer > div {
+  padding: 11px 16px;
+  border-right: 1px solid var(--bst-line);
+}
+
+.app__footer b {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--bst-text-mute);
+  font-weight: 400;
+}
+
+/* ── Метки датчиков на 3D-модели ───────────────────────── */
+
+.tw3d-label {
+  font-family: var(--bst-font-mono);
+  font-size: 10.5px;
+  line-height: 1.25;
+  white-space: nowrap;
+  padding: 2px 6px;
+  border: 1px solid var(--bst-ok);
+  color: var(--bst-text);
+  cursor: pointer;
+  pointer-events: auto;
+  background: color-mix(in srgb, var(--bst-bg) 84%, transparent);
+}
+
+.tw3d-label b {
+  font-weight: 500;
+  margin-right: 6px;
+  color: var(--bst-ok);
+}
+
+.tw3d-label[data-state='warning'] {
+  border-color: var(--bst-warn);
+}
+
+.tw3d-label[data-state='warning'] b {
+  color: var(--bst-warn);
+}
+
+.tw3d-label[data-state='alarm'] {
+  border-color: var(--bst-alarm);
+  background: color-mix(in srgb, var(--bst-alarm) 18%, var(--bst-bg));
+}
+
+.tw3d-label[data-state='alarm'] b {
+  color: var(--bst-alarm);
+}
+
+.tw3d-label[data-state='offline'] {
+  border-color: var(--bst-offline);
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.tw3d-label[data-state='offline'] b {
+  color: var(--bst-offline);
+}
+
+.tw3d-label[data-selected='true'] {
+  outline: 1px dashed var(--bst-text);
+  outline-offset: 2px;
+}
+
+.tw3d-axis {
+  font-family: var(--bst-font-mono);
+  font-size: 11px;
+  color: var(--bst-text-mute);
+  pointer-events: none;
+}
+
+.viewer-fallback {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+  font-family: var(--bst-font-mono);
+  font-size: 11.5px;
+  color: var(--bst-text-mute);
+}
+
+/* ── Узкие экраны ──────────────────────────────────────── */
+
+@media (max-width: 1240px) {
+  .overview,
+  .alarms,
+  .console-grid,
+  .selected-frame {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sensor-list {
+    max-height: 340px;
+  }
+}
+
+@media (max-width: 760px) {
+  .head-object {
+    gap: 14px;
+    font-size: 11px;
+  }
+  .head-tools {
+    margin-left: 0;
+  }
+  .tabs {
+    top: 96px;
+  }
+  .viewer {
+    min-height: 380px;
+  }
+  .charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
+}
