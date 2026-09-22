@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ru" data-theme="cyanotype" data-density="comfortable">
+<html lang="ru" data-theme="paper" data-density="comfortable">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BESTECH — демо цифрового двойника</title>
-    <meta name="description" content="Демо-стенд цифрового двойника стройплощадки: приём показаний датчиков, 3D-модель, телеметрия и аварии. Показания считает симулятор в браузере." />
+    <title>BESTECH — демо платформы</title>
+    <meta name="description" content="Демо платформы BESTECH: кабинет заказчика, документация и чертежи, цифровой двойник стройплощадки с симуляцией датчиков." />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23142130'/%3E%3Cpath d='M6 22h20M6 22V10l10-6 10 6v12' stroke='%2394bce3' fill='none' stroke-width='1.6'/%3E%3Ccircle cx='16' cy='16' r='2.6' fill='%237fc49a'/%3E%3C/svg%3E"
@@ -23,170 +23,8 @@
     </script>
   </head>
   <body>
-    <header class="app__header">
-      <div class="brand">
-        <span class="brand__mark bst-mono">BST</span>
-        <span>
-          <b>BESTECH</b>
-          <span class="brand__sub bst-mono">демо-стенд · цифровой двойник</span>
-        </span>
-      </div>
-
-      <div class="head-object bst-mono">
-        <span><span class="head-object__k">ОБЪЕКТ</span>2026-014 · Молочный комплекс</span>
-        <span><span class="head-object__k">СТАДИЯ</span>Строительство</span>
-        <span><span class="head-object__k">ВРЕМЯ</span><b id="clock">—</b></span>
-      </div>
-
-      <div class="head-tools">
-        <span class="live" id="liveBadge"><i class="live-dot"></i><span id="liveText">ЖИВОЙ РЕЖИМ</span></span>
-        <button type="button" class="bst-btn bst-btn--sm" id="pauseBtn">ПАУЗА</button>
-        <button type="button" class="bst-btn bst-btn--sm" id="themeBtn">БУМАГА</button>
-        <button type="button" class="bst-btn bst-btn--sm" id="resetBtn">СБРОС ДЕМО</button>
-      </div>
-    </header>
-
-    <nav class="tabs" id="tabs" aria-label="Разделы двойника">
-      <button type="button" class="tabs__tab" data-tab="overview" aria-current="page">Обзор</button>
-      <button type="button" class="tabs__tab" data-tab="telemetry">Телеметрия</button>
-      <button type="button" class="tabs__tab" data-tab="alarms">Аварии <span class="tabs__count bst-mono" id="tabAlarms">0</span></button>
-      <button type="button" class="tabs__tab" data-tab="console">Пульт показаний</button>
-      <button type="button" class="tabs__tab" data-tab="about">О стенде</button>
-    </nav>
-
-    <main>
-      <!-- ОБЗОР -->
-      <section class="page" id="tab-overview">
-        <div class="kpi-row" id="kpi"></div>
-
-        <div class="overview">
-          <div class="bst-frame viewer-frame">
-            <i class="bst-corner bst-corner--tl"></i><i class="bst-corner bst-corner--tr"></i>
-            <i class="bst-corner bst-corner--bl"></i><i class="bst-corner bst-corner--br"></i>
-            <div class="panel-head bst-mono">
-              <span class="bst-eyebrow">◭ МОДЕЛЬ ОБЪЕКТА · КАРКАС</span>
-              <span class="panel-head__views" id="viewButtons">
-                <button type="button" class="bst-btn bst-btn--sm" data-view="iso">ИЗОМЕТРИЯ</button>
-                <button type="button" class="bst-btn bst-btn--sm" data-view="top">СВЕРХУ</button>
-                <button type="button" class="bst-btn bst-btn--sm" data-view="side">ФАСАД</button>
-                <button type="button" class="bst-btn bst-btn--sm" id="rotateBtn" aria-pressed="false">ВРАЩЕНИЕ</button>
-              </span>
-            </div>
-            <div class="viewer" id="viewer"></div>
-            <div class="legend bst-mono" id="legend"></div>
-          </div>
-
-          <aside class="bst-frame sensors-frame">
-            <i class="bst-corner bst-corner--tl"></i><i class="bst-corner bst-corner--tr"></i>
-            <i class="bst-corner bst-corner--bl"></i><i class="bst-corner bst-corner--br"></i>
-            <div class="panel-head bst-mono">
-              <span class="bst-eyebrow">◭ ПОСЛЕДНИЕ ИЗМЕРЕНИЯ</span>
-              <span id="updated" class="muted"></span>
-            </div>
-            <div class="sensor-list" id="sensorList"></div>
-          </aside>
-        </div>
-
-        <div class="bst-frame selected-frame" id="selected"></div>
-      </section>
-
-      <!-- ТЕЛЕМЕТРИЯ -->
-      <section class="page" id="tab-telemetry" hidden>
-        <div class="panel-head bst-mono">
-          <span class="bst-eyebrow">◭ ТЕЛЕМЕТРИЯ ОБЪЕКТА</span>
-          <span class="bst-seg" role="group" aria-label="Окно графиков" id="periods">
-            <button type="button" class="bst-seg__opt" data-period="5" aria-pressed="true">5 МИН</button>
-            <button type="button" class="bst-seg__opt" data-period="15" aria-pressed="false">15 МИН</button>
-            <button type="button" class="bst-seg__opt" data-period="60" aria-pressed="false">1 Ч</button>
-          </span>
-        </div>
-        <div class="charts" id="charts"></div>
-      </section>
-
-      <!-- АВАРИИ -->
-      <section class="page" id="tab-alarms" hidden>
-        <div class="panel-head bst-mono">
-          <span class="bst-eyebrow">◭ ЖУРНАЛ ОТКЛОНЕНИЙ</span>
-          <span class="muted">квитирование фиксирует, что отклонение увидели</span>
-        </div>
-        <div class="alarms" id="alarms"></div>
-      </section>
-
-      <!-- ПУЛЬТ -->
-      <section class="page" id="tab-console" hidden>
-        <div class="bst-frame padded-frame">
-          <i class="bst-corner bst-corner--tl"></i><i class="bst-corner bst-corner--tr"></i>
-          <i class="bst-corner bst-corner--bl"></i><i class="bst-corner bst-corner--br"></i>
-          <div class="panel-head bst-mono">
-            <span class="bst-eyebrow">◭ СЦЕНАРИИ ПОКАЗА</span>
-            <span class="muted" id="scenarioNow"></span>
-          </div>
-          <div class="scenarios" id="scenarios"></div>
-        </div>
-
-        <div class="console-grid">
-          <div class="bst-frame padded-frame">
-            <i class="bst-corner bst-corner--tl"></i><i class="bst-corner bst-corner--tr"></i>
-            <i class="bst-corner bst-corner--bl"></i><i class="bst-corner bst-corner--br"></i>
-            <div class="panel-head bst-mono"><span class="bst-eyebrow">◭ РУЧНОЙ ВВОД ПОКАЗАНИЙ</span></div>
-            <div class="sliders" id="sliders"></div>
-          </div>
-
-          <div class="bst-frame padded-frame">
-            <i class="bst-corner bst-corner--tl"></i><i class="bst-corner bst-corner--tr"></i>
-            <i class="bst-corner bst-corner--bl"></i><i class="bst-corner bst-corner--br"></i>
-            <div class="panel-head bst-mono"><span class="bst-eyebrow">◭ ПАКЕТЫ ШЛЮЗА</span></div>
-            <ul class="packets bst-mono" id="packets"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- О СТЕНДЕ -->
-      <section class="page prose" id="tab-about" hidden>
-        <div class="bst-frame padded-frame">
-          <i class="bst-corner bst-corner--tl"></i><i class="bst-corner bst-corner--tr"></i>
-          <i class="bst-corner bst-corner--bl"></i><i class="bst-corner bst-corner--br"></i>
-          <h2 class="bst-h">Что показывает этот стенд</h2>
-          <p>
-            Это демонстрация стадии «Строительство» платформы BESTECH: как объект выглядит в цифровом двойнике,
-            пока идут работы. На модели стоят 12 датчиков молочного комплекса 36 × 18 м — температура и прочность
-            бетона, осадки деформационных марок, нагрузка на фермы покрытия, раскрытие трещины, давление в узле
-            водоснабжения и загрузка трансформатора.
-          </p>
-          <h3 class="bst-h">Откуда данные</h3>
-          <p>
-            На этом стенде показания считает симулятор в браузере: он повторяет дрейф, шум приборов и сценарии
-            отклонений. Настоящих датчиков здесь нет. На объекте те же экраны получают данные от шлюза
-            стройплощадки по HTTP:
-          </p>
-          <pre class="code bst-mono">POST /api/ingest/v1/readings
-Authorization: Bearer &lt;ключ устройства&gt;
-
-{ "device": "gw-01", "readings": [ { "sensor": "Ф-2", "value": 72.4 } ] }</pre>
-          <p>
-            Пороги допусков берутся из проекта и ППР. Значение вне допуска открывает аварию, возврат в допуск
-            её закрывает, а датчик, молчащий дольше четырёх периодов опроса, получает «нет связи»: пропуск
-            данных тоже событие.
-          </p>
-          <h3 class="bst-h">Что попробовать</h3>
-          <ul>
-            <li>На вкладке «Пульт показаний» нажать сценарий — например «Перегруз фермы Ф-2» — и вернуться на «Обзор».</li>
-            <li>Покрутить модель мышью, кликнуть по метке датчика: камера подлетит, снизу появится карточка.</li>
-            <li>Открыть «Аварии» и квитировать отклонение, как это делает технадзор.</li>
-            <li>Двинуть ползунок ручного ввода: так заказчик проверяет реакцию портала на нужное значение.</li>
-          </ul>
-          <h3 class="bst-h">Чего здесь нет</h3>
-          <p>
-            Мастерская выпуска чертежей, кабинет с документацией и роли пользователей остались в основном
-            портале: они работают с базой, файлами и Revit, и в статическом демо их не покажешь. Двойник же
-            полностью повторяет боевой: те же датчики, пороги, состояния, журнал и 3D-модель.
-          </p>
-        </div>
-      </section>
-    </main>
-
-    <footer class="app__footer bst-mono" id="footer"></footer>
-
+    <div id="root"></div>
+    <div class="toast" id="toast" hidden></div>
     <script type="module" src="js/app.js"></script>
   </body>
 </html>
